@@ -1,13 +1,17 @@
 const express = require('express'); //express 설치한거 불러오기
 const app =express(); // express 함수를 사용하도록 연결하기 (함수모음)
 
-app.use((req,res)=> {
-    res.json({
-        message:'It works!'
-    }); //DB에서 결국 json파일 형태로 파싱되어 옴.
-})
+// app.use((req,res)=> {
+//     res.json({
+//         message:'It works!'
+//     }); //DB에서 결국 json파일 형태로 파싱되어 옴.
+// })
 
+//카테고리화 = 라우터(routes) 서버를 여러가지 갈래로 연결하기
 
+const productRoutes = require('./routes/products')
+
+app.use('/products' , productRoutes); // .use(req,res) 이므로 5000/product가 요청들어오면, req는 productRoutes로 보낸다.
 
 
 
