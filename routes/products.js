@@ -66,15 +66,30 @@ router.put('/',(req,res)=> {
     })
 })
 //product data 삭제하기
-router.delete('/',(req,res)=>{
-    res.json({
-        message:'product data 삭제하기 '
-    })
+router.delete('/:productId',(req,res)=>{
+
+    productModel
+        .findByIdAndRemove(req.params.productId)
+        .then(_ => {
+            res.json({
+                message:"delete success"
+            })
+        }) //() or _ 는 굳이 result라고 정정해주지 않을때
+        .catch(err => {
+            res.json({
+                message:err.message
+            })
+        })
+
+
+    // res.json({
+    //     message:'product data 삭제하기 '
+    // })
 })
 
 // 일부분 데이터 불러오기 detailProduct :productId로 표현하면 가변!
 router.get('/:productId',(req,res)=>{
-    const id = req.params.productId //url 변수를 params
+    const id = req.params.productId //url에 존재하는 것을 쓸떄 params
 
     productModel //데이터가 어디 담겨 있냐!! 모델(그릇에 내용물도) 담겨있다.
         .findById(id)
@@ -89,8 +104,6 @@ router.get('/:productId',(req,res)=>{
                 message:err.message
             })
         })
-
 })
-
 
 module.exports= router; //라우터를 모듈화 시켜서 (모듈화 시키는 방법 module.exports)
