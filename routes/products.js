@@ -5,9 +5,26 @@ const productModel = require('../models/product') //만들었던 db모델을 불
 //<데이터 CRUD>
 //product data 불러오기 (get method를 사용하기)
 router.get('/',(req,res)=> {
-    res.json({
-        message: 'product data 불러오기'
-    })
+
+   productModel
+       .find()
+       .then(results => {
+           res.json({
+               count:results.length,
+               products: results
+           })
+       })
+       .catch(err => {
+           res.json({
+               message: err.message
+           })
+       })
+
+
+
+    // res.json({
+    //     message: 'product data 불러오기'
+    // })
 })
 //product data 생성하기 (post 방식, 등록하기)
 router.post('/',(req,res)=> {
