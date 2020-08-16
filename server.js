@@ -2,6 +2,7 @@ const express = require('express'); //express 설치한거 불러오기
 const app =express(); // express 함수를 사용하도록 연결하기 (함수모음)
 const morgan =require('morgan');
 const bodyParser= require('body-parser');
+const mongoose = require('mongoose')
 
 // app.use((req,res)=> {
 //     res.json({
@@ -20,6 +21,16 @@ const orderRoutes=require('./routes/orders')
 app.use('/products' , productRoutes); // .use(req,res) 이므로 5000/product가 요청들어오면, req는 productRoutes로 보낸다.
 app.use('/orders',orderRoutes);
 
+//데이터 베이스 연결 (데이터베이스 비번과 dbname 설정해주기)
+const dboptions =  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+} //mongodb
+const dbadress = "mongodb+srv://dydwk231:vnfms231@cluster0.xgwjf.mongodb.net/shoppingmall?retryWrites=true&w=majority"
+mongoose
+    .connect(dbadress, dboptions)
+    .then(() => console.log("MongoDB Connerted..."))
+    .catch(err => console.log(err.message));
 
 
 const PORT = 5000; //재사용이 가능하게 상수화 , 포트를 설정해주기 들어가는 출입경로
