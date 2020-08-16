@@ -10,7 +10,7 @@ router.get('/',(req,res)=> {
        .find()
        .then(results => {
            res.json({
-               count:results.length,
+               count: results.length,
                products: results
            })
        })
@@ -72,6 +72,25 @@ router.delete('/',(req,res)=>{
     })
 })
 
+// 일부분 데이터 불러오기 detailProduct :productId로 표현하면 가변!
+router.get('/:productId',(req,res)=>{
+    const id = req.params.productId //url 변수를 params
+
+    productModel //데이터가 어디 담겨 있냐!! 모델(그릇에 내용물도) 담겨있다.
+        .findById(id)
+        .then(result =>{
+            res.json({
+                message: "get product data from "+id,
+                product: result
+            })
+        })
+        .catch(err =>{
+            res.json({
+                message:err.message
+            })
+        })
+
+})
 
 
 module.exports= router; //라우터를 모듈화 시켜서 (모듈화 시키는 방법 module.exports)
