@@ -60,10 +60,31 @@ router.post('/',(req,res)=> {
 })
 
 //product data update하기 (put방식)
-router.put('/',(req,res)=> {
-    res.json({
-        message:'product data update 하기'
-    })
+router.put('/:productId',(req,res)=> {
+    const id = req.params.productId
+    const updateOps = {};
+    for (const ops of req.body){
+        console.log(ops)
+        updateOps[ops.propName] =ops.value;
+    }
+
+    productModel
+        .findByIdAndUpdate(id,{$set: updateOps}) //update 대상은 id에 해당하는 것, 내용은 updateops로 수정
+        .then(_=>{
+            // console.log("result is ", _)
+            res.json({
+                message:'update success'
+            })
+        })
+        .catch(err=>{
+            res.json({
+                message:err.message
+            })
+        })
+
+    // res.json({
+    //     message:'product data update 하기'
+    // })
 })
 //product data 삭제하기
 router.delete('/:productId',(req,res)=>{

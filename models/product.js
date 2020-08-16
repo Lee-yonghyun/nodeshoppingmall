@@ -1,7 +1,7 @@
 //1 db설계하는 방법
 const mongoose = require('mongoose')
 
-//2 #schema라 하면 하나의 셀을 의미
+//2 #schema라 하면 하나의 셀을 의미(name과 price)
 const productSchema = mongoose.Schema({
     name:String,
     price:Number
