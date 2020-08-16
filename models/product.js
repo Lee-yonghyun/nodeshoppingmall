@@ -1,8 +1,8 @@
 //1 db설계하는 방법
-const moongoose = require('mongoose')
+const mongoose = require('mongoose')
 
 //2 #schema라 하면 하나의 셀을 의미
-const productSchema = new mongoose.Schema({
+const productSchema = mongoose.Schema({
     name:String,
     price:Number
 })

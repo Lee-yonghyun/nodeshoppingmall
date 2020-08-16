@@ -1,24 +1,45 @@
 const express =require('express');
 const router = express.Router();
-
+const productModel = require('../models/product') //만들었던 db모델을 불러오기
 
 //<데이터 CRUD>
 //product data 불러오기 (get method를 사용하기)
-router.get('/total',(req,res)=> {
+router.get('/',(req,res)=> {
     res.json({
         message: 'product data 불러오기'
     })
 })
 //product data 생성하기 (post 방식, 등록하기)
-router.post('/registor',(req,res)=> {
-    const product={
-        name:req.body.productname,
+router.post('/',(req,res)=> {
+
+    const newProduct = new productModel({
+        name: req.body.productname,
         price:req.body.productprice
-    }
-    res.json({
-        message:'product data 생성하기',
-        createdProduct:product
     })
+
+    newProduct
+        .save()
+        .then(result => {
+            res.json({
+                message:"saved data",
+                productInfo:result
+            }) //저장되는 데이터 = result를 보여주겟다.
+        })
+        .catch(err => {
+            res.json({
+                message:err.message
+            })
+        })
+
+    // const product={
+    //     name:req.body.productname,
+    //     price:req.body.productprice
+    // }
+    // res.json({
+    //     message:'product data 생성하기',
+    //     createdProduct:product
+    // })
+
 })
 
 //product data update하기 (put방식)
