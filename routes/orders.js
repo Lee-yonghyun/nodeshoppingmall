@@ -1,6 +1,7 @@
 const express =require('express');
 const router = express.Router();
 const orderModel = require('../models/orders')
+const productModel = require('../models/product')
 
 router.get('/',(req,res)=>{
 
@@ -38,36 +39,67 @@ router.get('/',(req,res)=>{
 
 router.post('/',(req,res)=>{
 
-    const newOrder = new orderModel({
-        product:req.body.productId,
-        quantity:req.body.odquantity
-    })
+    productModel
+        .findById(req.body.productId)
+        .then(product =>{
+                const newOrder = new orderModel({
+                    product:req.body.productId,
+                    quantity:req.body.odquantity
+                })
 
-    newOrder
-        .save()
-        .then(result=>{
-            res.json({
-                message:'saved data',
-                orderInfo:{
-                    id:result._id,
-                    productid:result.product,
-                    quantity:result.quantity,
-                    request:{
-                        type:'GET',
-                        url:"http://localhost:5000/orders/"+result._id
-                    }
-                }
-            })
+                newOrder
+                    .save()
+                    .then(result=>{
+                        res.json({
+                            message:'saved data',
+                            orderInfo:{
+                                id:result._id,
+                                productid:result.product,
+                                quantity:result.quantity,
+                                request:{
+                                    type:'GET',
+                                    url:"http://localhost:5000/orders/"+result._id
+                                }
+                            }
+                        })
+                    })
+                    .catch(err=>{
+                        res.json({
+                            message:err.message
+                        })
+                    })
         })
         .catch(err=>{
             res.json({
-                message:err.message
+                message:'product not found'
             })
         })
-
-    // res.json({
-    //     message:'order data 생성하기'
+    // const newOrder = new orderModel({
+    //     product:req.body.productId,
+    //     quantity:req.body.odquantity
     // })
+    //
+    // newOrder
+    //     .save()
+    //     .then(result=>{
+    //         res.json({
+    //             message:'saved data',
+    //             orderInfo:{
+    //                 id:result._id,
+    //                 productid:result.product,
+    //                 quantity:result.quantity,
+    //                 request:{
+    //                     type:'GET',
+    //                     url:"http://localhost:5000/orders/"+result._id
+    //                 }
+    //             }
+    //         })
+    //     })
+    //     .catch(err=>{
+    //         res.json({
+    //             message:err.message
+    //         })
+    //     })
 })
 router.put('/:orderId',(req,res)=>{
 
