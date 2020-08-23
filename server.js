@@ -41,7 +41,7 @@ app.use('/orders',orderRoutes);
 
 
 const PORT = process.env.PORT || 5111; // 안될경우 5111로 포트 대체
-app.listen(PORT, console.log('server staeted')); // 포트번호를 지정하기, 로그를 찍어준다. .>>호출, 서버가 만들어짐
+app.listen(PORT, console.log('server started')); // 포트번호를 지정하기, 로그를 찍어준다. .>>호출, 서버가 만들어짐
 
 
 
