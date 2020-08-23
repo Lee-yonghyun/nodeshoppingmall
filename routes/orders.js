@@ -9,7 +9,7 @@ router.get('/',(req,res)=>{
         .find()
         .populate('product', ['name','price']) //productid로 찾는것!!!
         .then(results=>{
-            // console.log(results)
+            console.log("------------------- >", results)
             const response = {
                 count:results.length,
                 orders:results.map(result=>{
@@ -135,6 +135,7 @@ router.get('/:orderId',(req,res)=>{
 
     orderModel
         .findById(id)
+        .populate('product', ['name','price'])
         .then(result =>{
             // console.log(result)
             res.json({
