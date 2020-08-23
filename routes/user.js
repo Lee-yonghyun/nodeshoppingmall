@@ -95,6 +95,10 @@ router.post('/signup',(req,res)=>{
 // 로그인
 router.post('/login',(req,res)=>{
 
+    //이메일 체크 => 패스워드 매칭(복구) => 유저 정보 뿌려주기
+    userModel
+
+
 })
 
 
