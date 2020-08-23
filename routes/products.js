@@ -9,10 +9,26 @@ router.get('/',(req,res)=> {
    productModel
        .find()
        .then(results => {
-           res.json({
-               count: results.length,
-               products: results
-           })
+           const response = {
+               count:results.length,
+               products:results.map(result => {
+                   return{
+                       id:result._id,
+                       name:result.name,
+                       price:result.price,
+                       request:{
+                           type:"GET",
+                           url:"http://localhost:5000/products/" + result._id
+                       }
+                   }
+               })
+           }
+           res.json(response)
+
+           // res.json({
+           //     count: results.length,
+           //     products: results
+           // })
        })
        .catch(err => {
            res.json({
@@ -39,7 +55,15 @@ router.post('/',(req,res)=> {
         .then(result => {
             res.json({
                 message:"saved data",
-                productInfo:result
+                productInfo:{
+                    id:result._id,
+                    name:result.name,
+                    price:result.price,
+                    request:{
+                        type:'GET',
+                        url:"http://localhost:5000/products/" + result._id // detail get data 자동화해주기
+                    }
+                }
             }) //저장되는 데이터 = result를 보여주겟다.
         })
         .catch(err => {
@@ -73,7 +97,11 @@ router.put('/:productId',(req,res)=> {
         .then(_=>{
             // console.log("result is ", _)
             res.json({
-                message:'update success'
+                message:'update success',
+                request:{
+                    type:'GET',
+                    url:'http://localhost:5000/products/'+ id
+                }
             })
         })
         .catch(err=>{
@@ -93,7 +121,11 @@ router.delete('/:productId',(req,res)=>{
         .findByIdAndRemove(req.params.productId)
         .then(_ => {
             res.json({
-                message:"delete success"
+                message:"delete success",
+                request1:{
+                    type:"GET",
+                    url:"http://localhost:5000/products"
+                }
             })
         }) //() or _ 는 굳이 result라고 정정해주지 않을때
         .catch(err => {
@@ -117,7 +149,15 @@ router.get('/:productId',(req,res)=>{
         .then(result =>{
             res.json({
                 message: "get product data from "+id,
-                product: result
+                product: {
+                    id:result._id,
+                    name:result.name,
+                    price:result.price,
+                    request: {
+                        type:"GET",
+                        url:"http://localhost:5000/products/"
+                    }
+                }
             })
         })
         .catch(err =>{
