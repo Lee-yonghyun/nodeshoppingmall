@@ -62,12 +62,14 @@ exports.orders_get_product = (req,res)=>{
 
 exports.orders_created_order = (req,res)=>{
 
+    const {product, quantity} = req.body
+
     productModel
-        .findById(req.body.productId)
+        .findById(product)
         .then(product =>{
             const newOrder = new orderModel({
-                product:req.body.productId,
-                quantity:req.body.odquantity
+                product,
+                quantity
             })
 
             newOrder
