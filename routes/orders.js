@@ -1,164 +1,32 @@
 const express =require('express');
 const router = express.Router();
-const orderModel = require('../models/orders')
-const productModel = require('../models/product')
 const checkAuth = require('../middleware/check-auth')
+const {
+    orders_get_all,
+    orders_get_product,
+    orders_created_order,
+    orders_delete_order,
+    orders_update_order
+}  = require('../controllers/orders')
 
-router.get('/',checkAuth,(req,res)=>{
+router.get('/',checkAuth,orders_get_all)
 
-    orderModel
-        .find()
-        .populate('product', ['name','price']) //productid로 찾는것!!!
-        .then(results=>{
-            console.log("------------------- >", results)
-            const response = {
-                count:results.length,
-                orders:results.map(result=>{
-                    return{
-                        id:result._id,
-                        productId:result.product,
-                        quantity:result.quantity,
-                        request:{
-                            type:"GET",
-                            url:"http://localhost:5000/orders/"+result._id
-                        }
-                    }
-                })
-            }
-            res.json(response)
-        })
-        .catch(err=>{
-            res.json({
-                message:err.message
-            })
-        })
 
-    // res.json({
-    //     message:'order data 불러오기'
-    // })
-})
 
-router.post('/',checkAuth,(req,res)=>{
+router.post('/',checkAuth,orders_created_order)
 
-    productModel
-        .findById(req.body.productId)
-        .then(product =>{
-                const newOrder = new orderModel({
-                    product:req.body.productId,
-                    quantity:req.body.odquantity
-                })
 
-                newOrder
-                    .save()
-                    .then(result=>{
-                        res.json({
-                            message:'saved data',
-                            orderInfo:{
-                                id:result._id,
-                                productid:result.product,
-                                quantity:result.quantity,
-                                request:{
-                                    type:'GET',
-                                    url:"http://localhost:5000/orders/"+result._id
-                                }
-                            }
-                        })
-                    })
-                    .catch(err=>{
-                        res.json({
-                            message:err.message
-                        })
-                    })
-        })
-        .catch(err=>{
-            res.json({
-                message:'product not found'
-            })
-        })
-    // const newOrder = new orderModel({
-    //     product:req.body.productId,
-    //     quantity:req.body.odquantity
-    // })
-    //
-    // newOrder
-    //     .save()
-    //     .then(result=>{
-    //         res.json({
-    //             message:'saved data',
-    //             orderInfo:{
-    //                 id:result._id,
-    //                 productid:result.product,
-    //                 quantity:result.quantity,
-    //                 request:{
-    //                     type:'GET',
-    //                     url:"http://localhost:5000/orders/"+result._id
-    //                 }
-    //             }
-    //         })
-    //     })
-    //     .catch(err=>{
-    //         res.json({
-    //             message:err.message
-    //         })
-    //     })
-})
-router.put('/:orderId',checkAuth,(req,res)=>{
 
-    // res.json({
-    //     message:'order data update하기'
-    // })
-})
-router.delete('/:orderId',checkAuth,(req,res)=>{
+router.put('/:ordeid',checkAuth,orders_update_order)
 
-    orderModel
-        .findByIdAndRemove(req.params.orderId)
-        .then(_=>{
-            res.json({
-                message:"delete success",
-                request:{
-                    type:"GET",
-                    url:"http://localhost:5000/orders"
-                }
-            })
-        })
-        .catch(err=>{
-            res.json({
-                message:err.message
-            })
-        })
-    // res.json({
-    //     message:'order data 삭제하기'
-    // })
-})
 
-router.get('/:orderId',checkAuth,(req,res)=>{
-    const id = req.params.orderId
 
-    orderModel
-        .findById(id)
-        .populate('product', ['name','price'])
-        .then(result =>{
-            // console.log(result)
-            res.json({
-                message:'get order data from'+id,
-                order:{
-                    id:result._id,
-                    productId:result.product,
-                    quantity:result.quantity,
-                    request:{
-                        type:"GET",
-                        url:"http://localhost:5000/orders/"
-                    }
-                }
+router.delete('/:orderId',checkAuth,orders_delete_order)
 
-            })
-        })
-        .catch(err=>{
-            res.json({
-                message:err.message
-            })
-        })
 
-})
+
+router.get('/:orderId',checkAuth,orders_get_product)
+
+
 
 module.exports= router; //라우터를 모듈화 시켜서 (모듈화 시키는 방법 module.exports)
