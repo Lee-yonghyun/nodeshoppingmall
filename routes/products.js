@@ -1,6 +1,7 @@
 const express =require('express');
 const router = express.Router();
 const productModel = require('../models/product') //만들었던 db모델을 불러오기
+const checkAuth = require('../middleware/check-auth')
 
 //<데이터 CRUD>
 //product data 불러오기 (get method를 사용하기)
@@ -43,7 +44,7 @@ router.get('/',(req,res)=> {
     // })
 })
 //product data 생성하기 (post 방식, 등록하기)
-router.post('/',(req,res)=> {
+router.post('/',checkAuth, (req,res)=> {
 
     const newProduct = new productModel({
         name: req.body.productname,
@@ -84,7 +85,7 @@ router.post('/',(req,res)=> {
 })
 
 //product data update하기 (put방식)
-router.put('/:productId',(req,res)=> {
+router.put('/:productId',checkAuth,(req,res)=> {
     const id = req.params.productId
     const updateOps = {};
     for (const ops of req.body){
@@ -115,7 +116,7 @@ router.put('/:productId',(req,res)=> {
     // })
 })
 //product data 삭제하기
-router.delete('/:productId',(req,res)=>{
+router.delete('/:productId',checkAuth ,(req,res)=>{
 
     productModel
         .findByIdAndRemove(req.params.productId)

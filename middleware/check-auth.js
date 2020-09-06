@@ -13,7 +13,6 @@ module.exports = (req, res, next) => {
         return res.json({
             message:'Auth failed',
             //인증실패
-            error:error
         })
 
     }

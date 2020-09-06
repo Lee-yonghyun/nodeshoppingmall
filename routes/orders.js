@@ -2,8 +2,9 @@ const express =require('express');
 const router = express.Router();
 const orderModel = require('../models/orders')
 const productModel = require('../models/product')
+const checkAuth = require('../middleware/check-auth')
 
-router.get('/',(req,res)=>{
+router.get('/',checkAuth,(req,res)=>{
 
     orderModel
         .find()
@@ -37,7 +38,7 @@ router.get('/',(req,res)=>{
     // })
 })
 
-router.post('/',(req,res)=>{
+router.post('/',checkAuth,(req,res)=>{
 
     productModel
         .findById(req.body.productId)
@@ -101,13 +102,13 @@ router.post('/',(req,res)=>{
     //         })
     //     })
 })
-router.put('/:orderId',(req,res)=>{
+router.put('/:orderId',checkAuth,(req,res)=>{
 
     // res.json({
     //     message:'order data update하기'
     // })
 })
-router.delete('/:orderId',(req,res)=>{
+router.delete('/:orderId',checkAuth,(req,res)=>{
 
     orderModel
         .findByIdAndRemove(req.params.orderId)
@@ -130,7 +131,7 @@ router.delete('/:orderId',(req,res)=>{
     // })
 })
 
-router.get('/:orderId',(req,res)=>{
+router.get('/:orderId',checkAuth,(req,res)=>{
     const id = req.params.orderId
 
     orderModel
