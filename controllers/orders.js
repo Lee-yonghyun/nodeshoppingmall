@@ -7,7 +7,6 @@ exports.orders_get_all = (req,res)=>{
         .find()
         .populate('product', ['name','price']) //productid로 찾는것!!!
         .then(results=>{
-            console.log("------------------- >", results)
             const response = {
                 count:results.length,
                 orders:results.map(result=>{
@@ -38,7 +37,6 @@ exports.orders_get_product = (req,res)=>{
         .findById(id)
         .populate('product', ['name','price'])
         .then(result =>{
-            // console.log(result)
             res.json({
                 message:'get order data from'+id,
                 order:{

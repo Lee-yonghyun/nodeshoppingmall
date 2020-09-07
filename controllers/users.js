@@ -94,7 +94,6 @@ exports.users_login_user = (req,res)=>{
                             success:result,
                             token:token
                         })
-
                     }
                 })
             }

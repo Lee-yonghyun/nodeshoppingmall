@@ -124,7 +124,6 @@ exports.products_update_product = (req,res)=> {
     productModel
         .findByIdAndUpdate(id,{$set: updateOps}) //update 대상은 id에 해당하는 것, 내용은 updateops로 수정
         .then(_=>{
-            // console.log("result is ", _)
             res.json({
                 message:'update success',
                 request:{
